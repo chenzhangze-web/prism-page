@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PRISM: A Pedagogical Resource Inspection System for Multimodal Educational Content Quality Evaluation</title>
+  <meta name="description" content="An interactive system for evaluating AI-generated and teacher-created multimodal educational resources, with non-compensatory safety gating and evidence-grounded human–AI challenge dialogue. ACM Multimedia 2026 Demo Track.">
+
+  <meta property="og:title" content="PRISM: Pedagogical Resource Inspection System">
+  <meta property="og:description" content="Multimodal LLM-as-judge with non-compensatory safety gating and evidence-grounded challenge dialogue.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="static/images/teaser.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Source Sans 3"', 'system-ui', 'sans-serif'],
+            serif: ['"Source Serif 4"', 'Georgia', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            prism: { 50:'#f0f9ff', 100:'#e0f2fe', 500:'#0ea5e9', 600:'#0284c7', 700:'#0369a1' }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body { font-family: 'Source Sans 3', system-ui, sans-serif; }
+    .academic-body { font-family: 'Source Serif 4', Georgia, serif; line-height: 1.7; }
+    .bibtex { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
+    .prism-gradient { background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 25%, #6bcf7f 50%, #4d96ff 75%, #c780fa 100%); }
+    html { scroll-behavior: smooth; }
+  </style>
+</head>
+<body class="bg-white text-gray-900">
+
+  <!-- ============ HERO ============ -->
+  <section class="max-w-5xl mx-auto px-6 pt-16 pb-12 text-center">
+    <div class="mb-6">
+      <span class="inline-block px-3 py-1 text-xs font-semibold text-prism-700 bg-prism-100 rounded-full">
+        ACM Multimedia 2026 · Demo Track
+      </span>
+    </div>
+
+    <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-6 text-gray-900">
+      <span class="prism-gradient text-transparent bg-clip-text">PRISM</span>: A Pedagogical Resource Inspection System for Multimodal Educational Content Quality Evaluation
+    </h1>
+
+    <div class="academic-body text-base md:text-lg text-gray-700 mb-8">
+      <p class="mb-2">
+        Zhangze Chen<sup>1</sup>,
+        <span class="font-semibold">Jia Zhu</span><sup>1*</sup>,
+        Chen Fang<sup>1</sup>,
+        Shimin Di<sup>2</sup>,
+        Pasquale De Meo<sup>3</sup>
+      </p>
+      <p class="text-sm text-gray-600">
+        <sup>1</sup>Zhejiang Normal University &nbsp;·&nbsp;
+        <sup>2</sup>Southeast University &nbsp;·&nbsp;
+        <sup>3</sup>University of Messina
+      </p>
+      <p class="text-xs text-gray-500 mt-2"><sup>*</sup>Corresponding author</p>
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-3">
+      <a href="static/papers/prism-acmmm26.pdf" class="inline-flex items-center px-5 py-2.5 bg-gray-900 hover:bg-gray-700 text-white rounded-full font-semibold transition">📄 Paper</a>
+      <a href="https://youtu.be/qH7A96gM4-k" target="_blank" rel="noopener" class="inline-flex items-center px-5 py-2.5 bg-gray-900 hover:bg-gray-700 text-white rounded-full font-semibold transition">🎬 Video</a>
+      <a href="https://eduprism.zicp.fun/en/access" target="_blank" rel="noopener" class="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white rounded-full font-semibold transition shadow-lg">🎮 Try Live Demo</a>
+      <a href="#test-materials" class="inline-flex items-center px-5 py-2.5 bg-white hover:bg-gray-100 text-gray-900 border-2 border-gray-900 rounded-full font-semibold transition">📥 Test Materials</a>
+    </div>
+  </section>
+
+  <!-- ============ TEASER ============ -->
+  <section class="max-w-6xl mx-auto px-6 py-8">
+    <figure>
+      <img src="static/images/teaser.png" alt="PRISM system overview" class="w-full rounded-lg shadow-md border border-gray-200">
+      <figcaption class="academic-body text-sm text-gray-600 mt-3 px-4 leading-relaxed">
+        <strong>Figure 1: System overview.</strong> A conventional AI evaluator (left) returns an opaque score the teacher passively accepts; PRISM (right) scaffolds a five-stage workflow: independent initial judgment, multimodal LLM scoring against a three-layer non-compensatory rubric, conflict surfacing, structured challenge dialogue, and an audited consensus report.
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ ABSTRACT ============ -->
+  <section class="max-w-3xl mx-auto px-6 py-12">
+    <h2 class="text-2xl font-bold mb-4 text-gray-900">Abstract</h2>
+    <p class="academic-body text-base text-gray-800 leading-relaxed">
+      We present <strong>PRISM</strong> (Pedagogical Resource Inspection System for Multimodal content), an interactive system for evaluating AI-generated and teacher-created multimodal educational resources. PRISM grounds evaluation in a validated <strong>24-indicator three-layer non-compensatory rubric</strong>: a safety gate (L1) with veto authority, a core effectiveness layer (L2) yielding a five-tier grade (A to E), and a diagnostic layer (L3). A multimodal LLM jointly processes slide images and text with page-level evidence. Beyond "show-and-accept" scoring, PRISM supports <strong>traceable human–AI challenge and revision</strong>. Evaluators record an independent initial judgment before AI scores are revealed and may contest any score through traceable dialogue.
+    </p>
+  </section>
+
+  <!-- ============ KEY INNOVATIONS ============ -->
+  <section class="bg-gray-50 py-16">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-2xl font-bold mb-8 text-center text-gray-900">Key Innovations</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white p-6 rounded-lg border border-gray-200">
+          <div class="text-3xl mb-3">🛡️</div>
+          <h3 class="text-lg font-bold mb-2 text-gray-900">Non-Compensatory Safety Veto</h3>
+          <p class="academic-body text-sm text-gray-600 leading-relaxed">A safety failure cannot be offset by pedagogical strengths — any L1 score ≤ 2 triggers an immediate "prohibited from use" verdict.</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg border border-gray-200">
+          <div class="text-3xl mb-3">📋</div>
+          <h3 class="text-lg font-bold mb-2 text-gray-900">24-Indicator Delphi Rubric</h3>
+          <p class="academic-body text-sm text-gray-600 leading-relaxed">Grounded in Merrill's First Principles, Mayer's CTML, ICAP, and UNESCO AI-in-education guidelines; validated through a Modified Delphi study with 15 domain experts.</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg border border-gray-200">
+          <div class="text-3xl mb-3">💬</div>
+          <h3 class="text-lg font-bold mb-2 text-gray-900">Five-Dimensional Challenge</h3>
+          <p class="academic-body text-sm text-gray-600 leading-relaxed">Every revision must cite a specific slide page and rubric anchor. Both original AI score and user-final score are preserved for traceable audit.</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg border border-gray-200">
+          <div class="text-3xl mb-3">🖼️</div>
+          <h3 class="text-lg font-bold mb-2 text-gray-900">Multimodal Joint Reasoning</h3>
+          <p class="academic-body text-sm text-gray-600 leading-relaxed">The LLM scoring engine receives both slide images and text per layer, enabling judgments on image-text consistency and media quality that text-only systems miss.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LIVE DEMO ============ -->
+  <section id="live-demo" class="max-w-5xl mx-auto px-6 py-16">
+    <h2 class="text-2xl font-bold mb-6 text-center text-gray-900">Live Demo</h2>
+    <div class="aspect-video bg-gray-100 rounded-lg overflow-hidden shadow-md border border-gray-200 mb-4">
+      <iframe
+        src="https://www.youtube.com/embed/qH7A96gM4-k"
+        title="PRISM Demo Video"
+        frameborder="0"
+        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        class="w-full h-full">
+      </iframe>
+    </div>
+    <div class="text-center text-sm text-gray-500 mb-8">
+      Can't load the embedded player?
+      <a href="https://youtu.be/qH7A96gM4-k" target="_blank" rel="noopener" class="text-prism-600 hover:text-prism-800 font-semibold">▶ Watch on YouTube</a>
+    </div>
+    <div class="text-center">
+      <a href="https://eduprism.zicp.fun/en/access" target="_blank" rel="noopener" class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white rounded-full font-bold text-lg transition shadow-xl">
+        🎮 Try PRISM with Your Own Slides →
+      </a>
+      <p class="academic-body text-sm text-gray-500 mt-4">No registration required. Hosted on a research server.</p>
+      <div class="inline-flex items-center gap-2 mt-5 px-5 py-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-900">
+        <span class="font-semibold">Access code:</span>
+        <code class="font-mono font-bold tracking-wide">PRISM-DEMO</code>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TEST MATERIALS ============ -->
+  <section id="test-materials" class="bg-gray-50 py-16">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-2xl font-bold mb-4 text-center text-gray-900">Try with Sample Materials</h2>
+      <p class="academic-body text-center text-gray-700 max-w-3xl mx-auto mb-10">
+        To help reviewers explore PRISM in a few minutes, we provide three sample slide decks of varying quality and content. Upload any of them to the live demo to see how PRISM scores each - and to experience the challenge dialogue on scores you disagree with.
+      </p>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-lg border border-gray-200 flex flex-col">
+          <h3 class="text-base font-bold mb-3 text-gray-900">Animal.pptx</h3>
+          <p class="academic-body text-sm text-gray-600 leading-relaxed mb-6 flex-grow">
+            A natural-science slide deck for primary education. A good starting point for walking through the full five-stage workflow.
+          </p>
+          <a href="static/test-materials/Animal.pptx" class="text-prism-600 hover:text-prism-800 text-sm font-semibold">↓ Download (32 MB)</a>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg border border-gray-200 flex flex-col">
+          <h3 class="text-base font-bold mb-3 text-gray-900">Mammals.pptx</h3>
+          <p class="academic-body text-sm text-gray-600 leading-relaxed mb-6 flex-grow">
+            A natural-science deck with several issues worth noticing. Useful for seeing how PRISM treats materials that do not pass review unchanged.
+          </p>
+          <a href="static/test-materials/Mammals.pptx" class="text-prism-600 hover:text-prism-800 text-sm font-semibold">↓ Download (18 MB)</a>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg border border-gray-200 flex flex-col">
+          <h3 class="text-base font-bold mb-3 text-gray-900">Reptile.pptx</h3>
+          <p class="academic-body text-sm text-gray-600 leading-relaxed mb-6 flex-grow">
+            A primary-education science deck with mixed quality. Useful for exercising the challenge dialogue on indicators where reasonable evaluators may disagree.
+          </p>
+          <a href="static/test-materials/Reptile.pptx" class="text-prism-600 hover:text-prism-800 text-sm font-semibold">↓ Download (33 MB)</a>
+        </div>
+      </div>
+
+      <p class="academic-body text-center text-xs text-gray-500 mt-8 max-w-2xl mx-auto">
+        💡 We deliberately don't pre-announce what PRISM will find on each deck - that's the experiment. Use the access code <code class="px-1.5 py-0.5 bg-white border border-gray-200 rounded text-gray-700 font-mono">PRISM-DEMO</code> to enter the live system.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ FRAMEWORK ============ -->
+  <section class="max-w-6xl mx-auto px-6 py-16">
+    <h2 class="text-2xl font-bold mb-8 text-center text-gray-900">Three-Layer Non-Compensatory Rubric</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="border-2 border-red-200 bg-red-50 p-6 rounded-lg">
+        <div class="flex items-center justify-between mb-3"><span class="text-xl font-bold text-red-900">L1</span><span class="text-xs font-bold text-red-700 bg-red-200 px-2 py-1 rounded">6 indicators</span></div>
+        <h3 class="text-lg font-bold mb-2 text-red-900">Safety Gate</h3>
+        <p class="academic-body text-sm text-gray-700 leading-relaxed mb-3">Veto layer. Covers factual accuracy, ethics, privacy, link safety, citation verifiability, AI-authorship disclosure.</p>
+        <p class="text-xs text-red-700 font-semibold">Any score ≤ 2 ⇒ "Prohibited from use", regardless of L2/L3.</p>
+      </div>
+      <div class="border-2 border-blue-200 bg-blue-50 p-6 rounded-lg">
+        <div class="flex items-center justify-between mb-3"><span class="text-xl font-bold text-blue-900">L2</span><span class="text-xs font-bold text-blue-700 bg-blue-200 px-2 py-1 rounded">11 indicators</span></div>
+        <h3 class="text-lg font-bold mb-2 text-blue-900">Core Effectiveness</h3>
+        <p class="academic-body text-sm text-gray-700 leading-relaxed mb-3">Instructional design and content quality. Teaching aims, content coverage, learning activities, cognitive design, assessment.</p>
+        <p class="text-xs text-blue-700 font-semibold">Determines grade A/B/C/D/E (mean thresholds: 4.5 / 3.5 / 2.5 / 1.5).</p>
+      </div>
+      <div class="border-2 border-green-200 bg-green-50 p-6 rounded-lg">
+        <div class="flex items-center justify-between mb-3"><span class="text-xl font-bold text-green-900">L3</span><span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-1 rounded">7 indicators</span></div>
+        <h3 class="text-lg font-bold mb-2 text-green-900">Basic Requirements</h3>
+        <p class="academic-body text-sm text-gray-700 leading-relaxed mb-3">Technical quality, usability, compliance. Visual design, readability, media quality, metacognitive support.</p>
+        <p class="text-xs text-green-700 font-semibold">Diagnostic only; does not affect the grade.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RESULTS ============ -->
+  <section class="bg-gray-50 py-16">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-2xl font-bold mb-8 text-center text-gray-900">Preliminary Evaluation</h2>
+      <p class="academic-body text-center text-gray-700 max-w-3xl mx-auto mb-10">Pilot study with <strong>N = 12 educators</strong> (3 in-service teachers, 9 graduate students) on a curated 12-resource subset spanning all 5 quality tiers and 8 subject domains. Gold standard set by two parallel 4-expert panels.</p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+        <div class="text-center bg-white p-6 rounded-lg border border-gray-200">
+          <div class="text-3xl font-bold text-prism-600 mb-1">0.88</div>
+          <div class="text-xs uppercase tracking-wide text-gray-600">Pearson r vs Gold</div>
+          <div class="text-xs text-gray-400 mt-1">indicator-level, p &lt; .001</div>
+        </div>
+        <div class="text-center bg-white p-6 rounded-lg border border-gray-200">
+          <div class="text-3xl font-bold text-prism-600 mb-1">0.919</div>
+          <div class="text-xs uppercase tracking-wide text-gray-600">Expert ICC[2,k]</div>
+          <div class="text-xs text-gray-400 mt-1">4-rater gold panels</div>
+        </div>
+        <div class="text-center bg-white p-6 rounded-lg border border-gray-200">
+          <div class="text-3xl font-bold text-prism-600 mb-1">62.5%</div>
+          <div class="text-xs uppercase tracking-wide text-gray-600">Exact-Grade Match</div>
+          <div class="text-xs text-gray-400 mt-1">100% within ±1 tier</div>
+        </div>
+        <div class="text-center bg-white p-6 rounded-lg border border-gray-200">
+          <div class="text-3xl font-bold text-prism-600 mb-1">82.9</div>
+          <div class="text-xs uppercase tracking-wide text-gray-600">SUS Score</div>
+          <div class="text-xs text-gray-400 mt-1">"Good" on Bangor's scale</div>
+        </div>
+      </div>
+      <p class="academic-body text-center text-gray-700 max-w-3xl mx-auto mt-8 leading-relaxed">
+        The challenge mechanism shows a layer-dependent calibration pattern:
+        <strong>L3 design revisions are uniformly corrective</strong> (all 7/7 moved closer to expert gold),
+        while <strong>L2 pedagogical revisions skew toward user over-strictness</strong> (9/12 moved farther) —
+        suggesting precisely where human override is reliable and where AI calibration may be needed.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ ACKNOWLEDGMENTS ============ -->
+  <section class="max-w-4xl mx-auto px-6 py-12">
+    <h2 class="text-xl font-bold mb-4 text-gray-900">Acknowledgments</h2>
+    <p class="academic-body text-sm text-gray-600 leading-relaxed">
+      We acknowledge the support of the "Pioneer" and "Leading Goose" R&amp;D Program of Zhejiang (No. 2026C02A1236) and the National Natural Science Foundation of China (No. 62577050).
+    </p>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="bg-gray-900 text-gray-400 py-8">
+    <div class="max-w-5xl mx-auto px-6 text-center text-sm">
+      <p class="mb-2">© 2026 PRISM Authors · ACM Multimedia 2026 Demo Track</p>
+      <p class="text-xs text-gray-500 mb-1">Source code will be released upon paper acceptance.</p>
+      <p class="text-xs text-gray-500">Page hosted via GitHub Pages.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
